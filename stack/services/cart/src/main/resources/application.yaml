@@ -1,0 +1,7 @@
+server:
+  port: 8082
+spring:
+  application:
+    name: cart
+shop:
+  inventory-url: ${INVENTORY_URL:http://localhost:8083}

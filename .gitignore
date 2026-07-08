@@ -1,0 +1,8 @@
+# build output (services are normally built inside Docker)
+stack/services/**/target/
+
+# local tooling state
+.claude/settings.local.json
+.DS_Store
+*.iml
+.idea/

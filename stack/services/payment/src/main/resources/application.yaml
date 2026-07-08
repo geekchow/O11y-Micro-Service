@@ -1,0 +1,22 @@
+server:
+  port: 8084
+  tomcat:
+    threads:
+      max: 300
+spring:
+  application:
+    name: payment
+  datasource:
+    url: ${DB_URL:jdbc:postgresql://localhost:5432/shop}
+    username: ${DB_USER:shop}
+    password: ${DB_PASSWORD:shop}
+    hikari:
+      # THE INCIDENT KNOB — compose passes ${POOL_SIZE}; the walkthrough's bad
+      # deploy is reproduced by restarting this service with POOL_SIZE=10.
+      maximum-pool-size: ${HIKARI_MAX_POOL:20}
+      connection-timeout: 5000
+  sql:
+    init:
+      mode: always
+shop:
+  charge-db-seconds: ${CHARGE_DB_SECONDS:0.35}

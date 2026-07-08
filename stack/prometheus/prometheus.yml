@@ -1,0 +1,28 @@
+global:
+  scrape_interval: 15s
+  evaluation_interval: 15s
+
+rule_files:
+  - rules.yml
+
+# OTLP push arrives slightly out of order vs scrapes — allow it
+storage:
+  tsdb:
+    out_of_order_time_window: 30m
+
+otlp:
+  promote_resource_attributes:
+    - service.name
+    - deployment.environment
+
+scrape_configs:
+  # the watcher's watcher: the Collectors' own internal metrics
+  - job_name: otel-collector-agent
+    static_configs:
+      - targets: [otel-agent:8888]
+  - job_name: otel-collector-gateway
+    static_configs:
+      - targets: [otel-gateway:8888]
+  - job_name: prometheus
+    static_configs:
+      - targets: [localhost:9090]

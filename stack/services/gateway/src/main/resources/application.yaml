@@ -1,0 +1,12 @@
+server:
+  port: 8080
+  tomcat:
+    threads:
+      max: 300
+spring:
+  application:
+    name: gateway
+shop:
+  auth-url: ${AUTH_URL:http://localhost:8081}
+  cart-url: ${CART_URL:http://localhost:8082}
+  payment-url: ${PAYMENT_URL:http://localhost:8084}

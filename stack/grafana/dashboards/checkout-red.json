@@ -1,0 +1,131 @@
+{
+  "uid": "checkout-red",
+  "title": "Checkout — RED",
+  "tags": ["o11y-shop"],
+  "timezone": "browser",
+  "schemaVersion": 39,
+  "refresh": "10s",
+  "time": { "from": "now-15m", "to": "now" },
+  "panels": [
+    {
+      "id": 1,
+      "type": "timeseries",
+      "title": "p99 latency by service — click an exemplar dot to open the trace",
+      "gridPos": { "x": 0, "y": 0, "w": 12, "h": 9 },
+      "datasource": { "type": "prometheus", "uid": "prom" },
+      "fieldConfig": {
+        "defaults": {
+          "unit": "s",
+          "custom": { "drawStyle": "line", "fillOpacity": 10 }
+        },
+        "overrides": []
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "datasource": { "type": "prometheus", "uid": "prom" },
+          "expr": "histogram_quantile(0.99, sum by (service_name, le) (rate(traces_span_metrics_duration_seconds_bucket{span_kind=\"SPAN_KIND_SERVER\"}[1m])))",
+          "legendFormat": "{{service_name}}",
+          "exemplar": true
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "type": "timeseries",
+      "title": "Request rate by service",
+      "gridPos": { "x": 12, "y": 0, "w": 6, "h": 9 },
+      "datasource": { "type": "prometheus", "uid": "prom" },
+      "fieldConfig": {
+        "defaults": { "unit": "reqps", "custom": { "drawStyle": "line", "fillOpacity": 10 } },
+        "overrides": []
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "datasource": { "type": "prometheus", "uid": "prom" },
+          "expr": "sum by (service_name) (rate(traces_span_metrics_calls_total{span_kind=\"SPAN_KIND_SERVER\"}[1m]))",
+          "legendFormat": "{{service_name}}"
+        }
+      ]
+    },
+    {
+      "id": 3,
+      "type": "timeseries",
+      "title": "Error rate by service",
+      "gridPos": { "x": 18, "y": 0, "w": 6, "h": 9 },
+      "datasource": { "type": "prometheus", "uid": "prom" },
+      "fieldConfig": {
+        "defaults": { "unit": "reqps", "custom": { "drawStyle": "line", "fillOpacity": 10 } },
+        "overrides": []
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "datasource": { "type": "prometheus", "uid": "prom" },
+          "expr": "sum by (service_name) (rate(traces_span_metrics_calls_total{span_kind=\"SPAN_KIND_SERVER\", status_code=\"STATUS_CODE_ERROR\"}[1m]))",
+          "legendFormat": "{{service_name}}"
+        }
+      ]
+    },
+    {
+      "id": 4,
+      "type": "timeseries",
+      "title": "Orders placed / min (business counter from gateway)",
+      "gridPos": { "x": 0, "y": 9, "w": 8, "h": 8 },
+      "datasource": { "type": "prometheus", "uid": "prom" },
+      "fieldConfig": {
+        "defaults": { "unit": "opm", "custom": { "drawStyle": "line", "fillOpacity": 10 } },
+        "overrides": []
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "datasource": { "type": "prometheus", "uid": "prom" },
+          "expr": "sum(rate(orders_placed_total[1m])) * 60",
+          "legendFormat": "orders/min"
+        }
+      ]
+    },
+    {
+      "id": 5,
+      "type": "timeseries",
+      "title": "Hikari connections (payment) — watch during the incident",
+      "gridPos": { "x": 8, "y": 9, "w": 8, "h": 8 },
+      "datasource": { "type": "prometheus", "uid": "prom" },
+      "fieldConfig": {
+        "defaults": { "unit": "short", "custom": { "drawStyle": "line", "fillOpacity": 10 } },
+        "overrides": []
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "datasource": { "type": "prometheus", "uid": "prom" },
+          "expr": "sum by (state) ({__name__=~\"db_client_connection_count|db_client_connections_usage\", service_name=\"payment\"})",
+          "legendFormat": "{{state}}"
+        },
+        {
+          "refId": "B",
+          "datasource": { "type": "prometheus", "uid": "prom" },
+          "expr": "sum({__name__=~\"db_client_connection_pending_requests|db_client_connections_pending_requests\", service_name=\"payment\"})",
+          "legendFormat": "waiting for connection"
+        }
+      ]
+    },
+    {
+      "id": 6,
+      "type": "logs",
+      "title": "payment logs (WARN+) — trace_id links to Tempo",
+      "gridPos": { "x": 16, "y": 9, "w": 8, "h": 8 },
+      "datasource": { "type": "loki", "uid": "loki" },
+      "options": { "showTime": true, "wrapLogMessage": true, "enableLogDetails": true },
+      "targets": [
+        {
+          "refId": "A",
+          "datasource": { "type": "loki", "uid": "loki" },
+          "expr": "{service_name=\"payment\"} | severity_text =~ \"WARN|ERROR\""
+        }
+      ]
+    }
+  ]
+}

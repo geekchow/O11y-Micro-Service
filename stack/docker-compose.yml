@@ -1,0 +1,141 @@
+x-otel-env: &otel-env
+  OTEL_EXPORTER_OTLP_ENDPOINT: http://otel-agent:4318
+  OTEL_EXPORTER_OTLP_PROTOCOL: http/protobuf
+  OTEL_TRACES_SAMPLER: parentbased_always_on   # head sampling off; tail policies decide
+  OTEL_METRIC_EXPORT_INTERVAL: "15000"
+  OTEL_RESOURCE_ATTRIBUTES: service.version=1.0.0
+
+services:
+  # ── the shop ──────────────────────────────────────────────────────────
+  gateway:
+    build: { context: services, args: { SERVICE: gateway } }
+    environment:
+      <<: *otel-env
+      OTEL_SERVICE_NAME: gateway
+      AUTH_URL: http://auth:8081
+      CART_URL: http://cart:8082
+      PAYMENT_URL: http://payment:8084
+    ports: ["8080:8080"]
+    depends_on: [otel-agent, auth, cart, payment]
+
+  auth:
+    build: { context: services, args: { SERVICE: auth } }
+    environment:
+      <<: *otel-env
+      OTEL_SERVICE_NAME: auth
+    depends_on: [otel-agent]
+
+  cart:
+    build: { context: services, args: { SERVICE: cart } }
+    environment:
+      <<: *otel-env
+      OTEL_SERVICE_NAME: cart
+      INVENTORY_URL: http://inventory:8083
+    depends_on: [otel-agent, inventory]
+
+  inventory:
+    build: { context: services, args: { SERVICE: inventory } }
+    environment:
+      <<: *otel-env
+      OTEL_SERVICE_NAME: inventory
+    depends_on: [otel-agent]
+
+  payment:
+    build: { context: services, args: { SERVICE: payment } }
+    environment:
+      <<: *otel-env
+      OTEL_SERVICE_NAME: payment
+      DB_URL: jdbc:postgresql://postgres:5432/shop
+      DB_USER: shop
+      DB_PASSWORD: shop
+      HIKARI_MAX_POOL: ${POOL_SIZE:-20}   # the incident knob (.env)
+    depends_on:
+      postgres: { condition: service_healthy }
+      otel-agent: { condition: service_started }
+
+  postgres:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_DB: shop
+      POSTGRES_USER: shop
+      POSTGRES_PASSWORD: shop
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U shop -d shop"]
+      interval: 3s
+      timeout: 3s
+      retries: 20
+
+  loadgen:
+    image: curlimages/curl:8.14.1
+    entrypoint: ["/bin/sh", "/loadgen.sh"]
+    environment:
+      GATEWAY_URL: http://gateway:8080
+      LOAD_RPS: ${LOAD_RPS:-25}
+    volumes:
+      - ./loadgen/loadgen.sh:/loadgen.sh:ro
+    depends_on: [gateway]
+
+  # ── telemetry pipeline: agent tier → gateway tier ─────────────────────
+  otel-agent:
+    image: otel/opentelemetry-collector-contrib:0.156.0
+    command: ["--config=/etc/otelcol/config.yaml"]
+    volumes:
+      - ./otel/collector-agent.yaml:/etc/otelcol/config.yaml:ro
+    depends_on: [otel-gateway]
+
+  otel-gateway:
+    image: otel/opentelemetry-collector-contrib:0.156.0
+    command: ["--config=/etc/otelcol/config.yaml"]
+    volumes:
+      - ./otel/collector-gateway.yaml:/etc/otelcol/config.yaml:ro
+    depends_on: [tempo, loki, prometheus]
+
+  # ── backends: one per signal type ─────────────────────────────────────
+  tempo:
+    image: grafana/tempo:2.8.1
+    user: root          # demo-only: lets tempo write the named volume
+    command: ["-config.file=/etc/tempo.yaml"]
+    volumes:
+      - ./tempo/tempo.yaml:/etc/tempo.yaml:ro
+      - tempo-data:/var/tempo
+    ports: ["3200:3200"]
+
+  loki:
+    image: grafana/loki:3.7.3
+    user: root          # demo-only, same reason
+    command: ["-config.file=/etc/loki/loki.yaml"]
+    volumes:
+      - ./loki/loki.yaml:/etc/loki/loki.yaml:ro
+      - loki-data:/loki
+    ports: ["3100:3100"]
+
+  prometheus:
+    image: prom/prometheus:v3.13.0
+    command:
+      - --config.file=/etc/prometheus/prometheus.yml
+      - --web.enable-otlp-receiver
+      - --enable-feature=exemplar-storage
+      - --storage.tsdb.path=/prometheus
+    volumes:
+      - ./prometheus/prometheus.yml:/etc/prometheus/prometheus.yml:ro
+      - ./prometheus/rules.yml:/etc/prometheus/rules.yml:ro
+      - prom-data:/prometheus
+    ports: ["9090:9090"]
+
+  # ── the correlation surface ───────────────────────────────────────────
+  grafana:
+    image: grafana/grafana:12.0.2
+    environment:
+      GF_AUTH_ANONYMOUS_ENABLED: "true"
+      GF_AUTH_ANONYMOUS_ORG_ROLE: Admin
+      GF_AUTH_DISABLE_LOGIN_FORM: "true"
+    volumes:
+      - ./grafana/provisioning:/etc/grafana/provisioning:ro
+      - ./grafana/dashboards:/var/lib/grafana/dashboards:ro
+    ports: ["3000:3000"]
+    depends_on: [prometheus, tempo, loki]
+
+volumes:
+  tempo-data:
+  loki-data:
+  prom-data:
