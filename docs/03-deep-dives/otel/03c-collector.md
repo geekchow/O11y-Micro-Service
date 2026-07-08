@@ -95,7 +95,7 @@ flowchart LR
 
 - **Backend down:** that exporter's queue absorbs, retries with backoff, then drops — *other* exporters in the fan-out keep flowing (blast-radius isolation per backend). Add the `file_storage` extension for a queue that survives Collector restarts.
 - **Collector overwhelmed:** `memory_limiter` starts refusing; refusal propagates back as OTLP errors; SDK queues fill and drop at the source. Graceful degradation end to end, app threads never blocked.
-- **Collector down:** SDK retries briefly, drops. This is why the agent runs on-node (nearly nothing to lose on the first hop) — and why the Collector's own `health_check` + internal metrics feed Prometheus, the "watcher's watcher" pattern from the [parent guide](../03-how.md).
+- **Collector down:** SDK retries briefly, drops. This is why the agent runs on-node (nearly nothing to lose on the first hop) — and why the Collector's own `health_check` + internal metrics feed Prometheus, the "watcher's watcher" pattern from the [parent guide](../../01-concepts/03-how.md).
 
 **Quality bar check:** you can read any collector YAML and draw its pipelines; you can argue agent vs gateway for a given org; and for each failure ("Splunk ingest is lagging") you can say which queue fills and what gets dropped.
 

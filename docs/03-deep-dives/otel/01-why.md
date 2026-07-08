@@ -1,6 +1,6 @@
 # Stage 1 — WHY: The problem OpenTelemetry solves
 
-> **Where you are:** Stage 1 of 4. The parent guide's [01-why](../01-why.md) explained why *observability* exists; this file explains why a *standard for producing telemetry* had to exist on top of that.
+> **Where you are:** Stage 1 of 4. The parent guide's [01-why](../../01-concepts/01-why.md) explained why *observability* exists; this file explains why a *standard for producing telemetry* had to exist on top of that.
 > **What you'll know after this file:** the three pains — lock-in, the N×M matrix, and siloed signals — that make OTel's design inevitable.
 
 ## The world before OTel

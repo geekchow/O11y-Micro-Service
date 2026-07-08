@@ -27,8 +27,8 @@ sequenceDiagram
 
 Two things to notice, because they're the design showing through:
 
-- **Context propagation is invisible here** — it happened earlier, inside the request path (`traceparent` header between services, [deep dive 03b](../otel-deep-dive/03b-context.md)). By the time spans reach the Collectors they already share a trace_id; the pipeline never joins anything.
-- **The sampling decision is at the last possible moment.** Head sampling is off (`parentbased_always_on`), so every span crosses both collector hops and only Tempo's doorstep is guarded. That is the tail-sampling trade from [deep dive 03d](../otel-deep-dive/03d-sampling.md): full transport cost, perfect information.
+- **Context propagation is invisible here** — it happened earlier, inside the request path (`traceparent` header between services, [deep dive 03b](../03-deep-dives/otel/03b-context.md)). By the time spans reach the Collectors they already share a trace_id; the pipeline never joins anything.
+- **The sampling decision is at the last possible moment.** Head sampling is off (`parentbased_always_on`), so every span crosses both collector hops and only Tempo's doorstep is guarded. That is the tail-sampling trade from [deep dive 03d](../03-deep-dives/otel/03d-sampling.md): full transport cost, perfect information.
 
 ## 3.2 The metric path — three sources, one store
 
@@ -41,13 +41,13 @@ flowchart LR
 ```
 *Caption: three metric origins converge on one TSDB. Anchors: source 1 is the javaagent's default meters; source 2 is the `spanmetrics` connector + the `traces/spanmetrics` pipeline in [collector-gateway.yaml](../../stack/otel/collector-gateway.yaml); source 3 is `scrape_configs` in [prometheus.yml](../../stack/prometheus/prometheus.yml).*
 
-- **Push and pull coexist**: app metrics arrive by OTLP push (with `--web.enable-otlp-receiver` on Prometheus), while collector self-metrics are pulled — the same asymmetry the [parent guide](../03-how.md) explains, both variants live in this one stack.
-- **Order matters**: spanmetrics taps the *unsampled* span stream (its own pipeline, no `tail_sampling`), so dashboard rates are true even though Tempo stores a subset — the [03d caveat](../otel-deep-dive/03d-sampling.md), implemented.
+- **Push and pull coexist**: app metrics arrive by OTLP push (with `--web.enable-otlp-receiver` on Prometheus), while collector self-metrics are pulled — the same asymmetry the [parent guide](../01-concepts/03-how.md) explains, both variants live in this one stack.
+- **Order matters**: spanmetrics taps the *unsampled* span stream (its own pipeline, no `tail_sampling`), so dashboard rates are true even though Tempo stores a subset — the [03d caveat](../03-deep-dives/otel/03d-sampling.md), implemented.
 - **Exemplars ride along**: the connector attaches a sampled trace_id to histogram buckets (`exemplars: enabled`), which is the raw material for the metric→trace pivot in §3.4.
 
 ## 3.3 The log path
 
-No code was written for logging. The chain: `log.warn(...)` → Logback → the javaagent's auto-installed appender turns it into a **LogRecord already stamped with the active span's trace_id** ([deep dive 03a](../otel-deep-dive/03a-signals.md)) → same OTLP journey as spans → the gateway's `logs` pipeline → `otlphttp/loki` exporter → Loki's native OTLP endpoint (`/otlp`), where `service_name` becomes a stream label and `trace_id` becomes **structured metadata** (enabled by `allow_structured_metadata` in [loki.yaml](../../stack/loki/loki.yaml)).
+No code was written for logging. The chain: `log.warn(...)` → Logback → the javaagent's auto-installed appender turns it into a **LogRecord already stamped with the active span's trace_id** ([deep dive 03a](../03-deep-dives/otel/03a-signals.md)) → same OTLP journey as spans → the gateway's `logs` pipeline → `otlphttp/loki` exporter → Loki's native OTLP endpoint (`/otlp`), where `service_name` becomes a stream label and `trace_id` becomes **structured metadata** (enabled by `allow_structured_metadata` in [loki.yaml](../../stack/loki/loki.yaml)).
 
 The subtle part: *structured metadata is not the log line.* `{service_name="payment"} | trace_id = "abc..."` filters on metadata; grepping the text for the id would find nothing.
 

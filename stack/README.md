@@ -1,6 +1,6 @@
 # O11y Shop — a running observability stack you can tour
 
-A complete, open-source observability system around a 5-service Spring Boot shop — built to show **how the components work together**: how spans, metrics, and logs are produced, piped, sampled, stored per signal, and stitched back together by one trace_id. The guided tour lives in **[docs/stack-tour/](../docs/stack-tour/00-overview.md)**; this README is the operations card.
+A complete, open-source observability system around a 5-service Spring Boot shop — built to show **how the components work together**: how spans, metrics, and logs are produced, piped, sampled, stored per signal, and stitched back together by one trace_id. The guided tour lives in **[docs/02-example/](../docs/02-example/00-overview.md)**; this README is the operations card.
 
 ```
 loadgen ─→ gateway ─→ auth
@@ -39,11 +39,11 @@ Give it ~2 minutes for first metrics (15 s export + flush intervals). Healthy st
 | Shop API | `curl -X POST localhost:8080/checkout -H 'Content-Type: application/json' -d '{"cartId":"1","amountCents":42,"tenant":"acme"}'` | generate your own telemetry |
 
 **The three pivots** (wired in [grafana/provisioning/datasources/datasources.yaml](grafana/provisioning/datasources/datasources.yaml)):
-exemplar dot → trace in Tempo · span → "Logs for this span" in Loki · log line's `trace_id` → "View trace". How each is wired: [docs/stack-tour/03-how.md §3.4](../docs/stack-tour/03-how.md).
+exemplar dot → trace in Tempo · span → "Logs for this span" in Loki · log line's `trace_id` → "View trace". How each is wired: [docs/02-example/03-how.md §3.4](../docs/02-example/03-how.md).
 
 ## 3. The guided tour
 
-Follow **[docs/stack-tour/04-walkthrough.md](../docs/stack-tour/04-walkthrough.md)**: send one checkout and find its footprint in every component — trace_id from Loki metadata, full waterfall from Tempo's API, its increment in spanmetrics, the collectors' own counters moving, and the full pivot circle in Grafana. Exercises that stress each component (kill a backend, redact attributes, starve the tail sampler) are in [05-next-steps.md](../docs/stack-tour/05-next-steps.md).
+Follow **[docs/02-example/04-walkthrough.md](../docs/02-example/04-walkthrough.md)**: send one checkout and find its footprint in every component — trace_id from Loki metadata, full waterfall from Tempo's API, its increment in spanmetrics, the collectors' own counters moving, and the full pivot circle in Grafana. Exercises that stress each component (kill a backend, redact attributes, starve the tail sampler) are in [05-next-steps.md](../docs/02-example/05-next-steps.md).
 
 ## 4. Knobs
 
@@ -52,12 +52,12 @@ Follow **[docs/stack-tour/04-walkthrough.md](../docs/stack-tour/04-walkthrough.m
 | `POOL_SIZE` | [.env](.env) / env override | 20 | Hikari max pool in payment — the incident switch (§5) |
 | `LOAD_RPS` | [.env](.env) | 24 | open-loop request rate |
 | `CHARGE_DB_SECONDS` | [.env](.env) | 0.6 | how long each charge holds a DB connection |
-| tail policies | [otel/collector-gateway.yaml](otel/collector-gateway.yaml) | errors + >2 s + **25%** | 25% baseline is the exploration-friendly default; set 1% for the production-like ratio from [docs/04-walkthrough.md](../docs/04-walkthrough.md) |
+| tail policies | [otel/collector-gateway.yaml](otel/collector-gateway.yaml) | errors + >2 s + **25%** | 25% baseline is the exploration-friendly default; set 1% for the production-like ratio from [docs/01-concepts/04-walkthrough.md](../docs/01-concepts/04-walkthrough.md) |
 | head sampler | compose `OTEL_TRACES_SAMPLER` | `parentbased_always_on` | switch to `parentbased_traceidratio` to watch head+tail compose |
 
 ## 5. Optional: the incident drill (diagnostics story)
 
-The stack can also reproduce the [docs/04-walkthrough.md](../docs/04-walkthrough.md) incident — the deploy that halves payment's connection pool:
+The stack can also reproduce the [docs/01-concepts/04-walkthrough.md](../docs/01-concepts/04-walkthrough.md) incident — the deploy that halves payment's connection pool:
 
 ```bash
 POOL_SIZE=10 docker compose up -d payment    # break   (T+0)
@@ -75,7 +75,7 @@ Why the math works: loadgen is open-loop; ~22 req/s of charges × ~0.65 s connec
 
 ## 6. What this demo deliberately simplifies
 
-- **One gateway Collector** — several would need the two-tier `loadbalancing`-exporter architecture ([docs/otel-deep-dive/03d](../docs/otel-deep-dive/03d-sampling.md)) for tail sampling.
+- **One gateway Collector** — several would need the two-tier `loadbalancing`-exporter architecture ([docs/03-deep-dives/otel/03d](../docs/03-deep-dives/otel/03d-sampling.md)) for tail sampling.
 - **No Alertmanager** — the rule fires in Prometheus; delivery/dedup/routing is omitted.
 - **`user: root` on Tempo/Loki** — local-volume convenience, not production practice.
 - **No synthetics/RUM** — outside-in signals need a probe outside this network.

@@ -1,6 +1,6 @@
 # OpenTelemetry Deep Dive — Guide Overview
 
-> **Where you are:** the entry point of the OTel deep dive. This pack zooms into concept #1–#4 of the [parent observability guide](../00-overview.md): what the parent covered in four table rows, this covers in four files.
+> **Where you are:** **stage 3 (depth)** of the [learning path](../../../README.md) — the first entry in the [deep-dive index](../README.md). This pack zooms into concept #1–#4 of the [stage-1 concepts guide](../../01-concepts/00-overview.md): what that guide covered in four table rows, this covers in four files.
 > **What you'll know after this pack:** OTel's internal anatomy — how a signal is born (API/SDK), how context stitches signals across processes, how the Collector pipeline is built, and how sampling keeps the bill sane without losing the interesting traces.
 
 **Sources:** [opentelemetry.io/docs/concepts](https://opentelemetry.io/docs/concepts/) and [opentelemetry.io/docs/collector](https://opentelemetry.io/docs/collector/).

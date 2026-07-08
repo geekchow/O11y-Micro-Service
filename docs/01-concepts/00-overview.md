@@ -1,6 +1,6 @@
 # Observability for Modern Microservices — Guide Overview
 
-> **Where you are:** the entry point of the guide.
+> **Where you are:** **stage 1 (concepts)** of the [learning path](../../README.md) — the entry point of the whole journey.
 > **What you'll know after this file:** the whole territory in one glance — every concept, every tool, and how the files ahead are organized.
 
 This guide explains **observability** for microservice applications — monitoring, alerting, logging, tracing, APM, synthetics, and RUM — and demonstrates how five real tools cooperate to deliver it:
@@ -71,15 +71,13 @@ mindmap
 | [04-walkthrough.md](04-walkthrough.md) | WALKTHROUGH | One checkout-latency incident, traced end to end through all five tools |
 | [05-next-steps.md](05-next-steps.md) | — | Exercises and further reading |
 
-## Deep dives
+## Continuing the path
 
-| Pack | Zooms into |
-|---|---|
-| [otel-deep-dive/](otel-deep-dive/00-overview.md) | OpenTelemetry internals: signals, context propagation, the Collector, sampling |
-| [stack-tour/](stack-tour/00-overview.md) | The running [../stack/](../stack/README.md): what each container does, the three signal paths, and a hands-on tour |
+When this pack is done, the concepts become concrete and then deep:
 
-## Runnable stack
-
-[../stack/](../stack/README.md) — a deployable docker-compose instance of this guide: Spring Boot shop + OTel agent/gateway Collectors + Tempo + Prometheus + Loki + Grafana. Tour it component by component via [stack-tour/](stack-tour/00-overview.md); it can also reproduce the [04-walkthrough](04-walkthrough.md) pool-exhaustion incident with one env var.
+| Next stage | Where | What it adds |
+|---|---|---|
+| **2 · Example** | [stack/](../../stack/README.md) *(run it)* + [02-example/](../02-example/00-overview.md) *(tour it)* | Everything above as a live docker-compose system — including a one-knob reproduction of this pack's [04-walkthrough](04-walkthrough.md) incident |
+| **3 · Depth** | [03-deep-dives/](../03-deep-dives/README.md) | Each key player opened up on its own; [otel/](../03-deep-dives/otel/00-overview.md) is ready today |
 
 ➡ **Next:** [01-why.md](01-why.md)

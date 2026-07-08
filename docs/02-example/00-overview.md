@@ -1,9 +1,9 @@
-# Stack Tour — How the Running Observability Stack Works
+# The Example — How the Running Observability Stack Works
 
-> **Where you are:** the entry point of the stack tour.
+> **Where you are:** **stage 2 (example)** of the [learning path](../../README.md) — the tour of the runnable stack.
 > **What you'll know after this pack:** what every container in [`stack/`](../../stack/README.md) does, how the three signal paths flow through them, and how to *watch each component doing its job* on your own machine.
 
-The [parent guide](../00-overview.md) teaches the concepts; the [OTel deep dive](../otel-deep-dive/00-overview.md) teaches the internals; **this pack is the concrete instance** — the same ideas, but every box is a real container with a port you can curl. Nothing is redefined here: every concept links back to where it was introduced.
+Stage 1 ([concepts](../01-concepts/00-overview.md)) teaches the ideas; stage 3 ([deep dives](../03-deep-dives/README.md)) opens each player up; **this pack is the concrete instance in between** — the same ideas, but every box is a real container with a port you can curl. Nothing is redefined here: every concept links back to where it was introduced.
 
 ## The whole territory in one mindmap
 

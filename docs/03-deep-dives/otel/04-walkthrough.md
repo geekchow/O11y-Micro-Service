@@ -74,7 +74,7 @@ keep-1pct        (probabilistic)      → not consulted; already kept
 
 ## 6 — The payoff (14:09, an engineer looks)
 
-A declined-payments panel (fed by the **Counter** and spanmetrics) shows a blip. Click the **exemplar** dot → Tempo opens **trace T1**: gateway `SERVER` → `checkout` → `CLIENT` → payment `SERVER`, with the exception event in the waterfall. "Logs for this span" → the LogRecord, matched by `trace_id=T1`, `tenant.id=acme` attached. Metric → trace → log, zero grep, exactly the pivot the [parent guide's incident flow](../03-how.md) promised.
+A declined-payments panel (fed by the **Counter** and spanmetrics) shows a blip. Click the **exemplar** dot → Tempo opens **trace T1**: gateway `SERVER` → `checkout` → `CLIENT` → payment `SERVER`, with the exception event in the waterfall. "Logs for this span" → the LogRecord, matched by `trace_id=T1`, `tenant.id=acme` attached. Metric → trace → log, zero grep, exactly the pivot the [parent guide's incident flow](../../01-concepts/03-how.md) promised.
 
 ## Recap — the Stage-1 pains, paid off in one request
 

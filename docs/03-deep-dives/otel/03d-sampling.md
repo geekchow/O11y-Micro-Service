@@ -44,7 +44,7 @@ processors:
         probabilistic: { sampling_percentage: 1 }
 ```
 
-Policies OR together (any match ⇒ keep); `and`/`composite` types build richer logic (e.g. "10% of checkout traces, 1% of everything else, capped at N spans/sec" via `rate_limiting`). The result is the observability ideal: **100% of errors and slow traces, ~1% of boring ones** — the "keep diagnostic power at 1% of the storage bill" line from the [parent guide](../03-how.md), now with its mechanism visible.
+Policies OR together (any match ⇒ keep); `and`/`composite` types build richer logic (e.g. "10% of checkout traces, 1% of everything else, capped at N spans/sec" via `rate_limiting`). The result is the observability ideal: **100% of errors and slow traces, ~1% of boring ones** — the "keep diagnostic power at 1% of the storage bill" line from the [parent guide](../../01-concepts/03-how.md), now with its mechanism visible.
 
 ### The catch: tail sampling is a distributed-systems commitment
 

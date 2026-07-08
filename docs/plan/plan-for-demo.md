@@ -2,7 +2,7 @@
 
 ## Context
 
-The repo is currently docs-only: an observability guide pack in `docs/` plus an OTel deep dive in `docs/otel-deep-dive/`. [docs/04-walkthrough.md](/Users/phil/O11y-Micro-Service/docs/04-walkthrough.md) narrates a "checkout is slow" incident (payment-service deploy halves the Hikari pool 20→10) through a full observability funnel. Prompt.md item 2 asks to make that walkthrough actually deployable with open-source tools. The user's stack: **Spring Boot shop + OTel Java agent + agent/gateway Collectors + Tempo + Prometheus + Loki + Grafana, via docker-compose** (Loki replaces the doc's Splunk; AppDynamics/synthetics out of scope). Decisions confirmed: **full 5-service topology**, **alert rule only (no Alertmanager)**.
+The repo is currently docs-only: an observability guide pack in `docs/` plus an OTel deep dive in `docs/otel-deep-dive/`. [docs/04-walkthrough.md](../01-concepts/04-walkthrough.md) narrates a "checkout is slow" incident (payment-service deploy halves the Hikari pool 20→10) through a full observability funnel. Prompt.md item 2 asks to make that walkthrough actually deployable with open-source tools. The user's stack: **Spring Boot shop + OTel Java agent + agent/gateway Collectors + Tempo + Prometheus + Loki + Grafana, via docker-compose** (Loki replaces the doc's Splunk; AppDynamics/synthetics out of scope). Decisions confirmed: **full 5-service topology**, **alert rule only (no Alertmanager)**.
 
 The deliverable: `stack/` directory where `docker compose up` brings up everything, a load generator makes telemetry flow, one env-var change reproduces the incident, and the metric → exemplar → trace → log pivot works in Grafana exactly as the doc describes.
 

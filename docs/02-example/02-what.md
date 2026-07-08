@@ -45,7 +45,7 @@ flowchart LR
 ```
 *Caption: the compose network by role — producers push OTLP to the agent tier; only the gateway tier knows the backends; Grafana only knows the backends; and Prometheus watches the watchers by scraping both collectors.*
 
-One boundary worth stating twice: **telemetry flows left-to-right only.** No service knows Tempo exists; no backend knows the shop exists. The two Collector containers are the only place where "where does telemetry go" is decided — which is the entire point of the [pipeline concept](../otel-deep-dive/03c-collector.md).
+One boundary worth stating twice: **telemetry flows left-to-right only.** No service knows Tempo exists; no backend knows the shop exists. The two Collector containers are the only place where "where does telemetry go" is decided — which is the entire point of the [pipeline concept](../03-deep-dives/otel/03c-collector.md).
 
 **Quality bar check:** given any port number from the table you can say which component answers it and what you'd learn by opening it.
 

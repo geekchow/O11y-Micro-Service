@@ -59,7 +59,7 @@ Rule of thumb: *counting events* → Counter; *timing things* → Histogram; *re
 ### Three SDK-side mechanisms worth knowing
 
 - **Views** — SDK-level config that renames instruments, drops attributes (cardinality control!), or changes histogram buckets, *without touching instrumentation code*. The metrics analogue of the API/SDK split.
-- **Exemplars** — sampled measurement points carrying the current trace_id, attached to metric data. This is the mechanic behind Grafana's "click the latency spike → jump to trace" pivot from the [parent guide](../03-how.md).
+- **Exemplars** — sampled measurement points carrying the current trace_id, attached to metric data. This is the mechanic behind Grafana's "click the latency spike → jump to trace" pivot from the [parent guide](../../01-concepts/03-how.md).
 - **Temporality** — cumulative (each export = total since start, Prometheus-style) vs delta (each export = change since last, Datadog-style). Exporters pick a default; you mostly care when debugging "why does my counter look weird in backend X."
 
 ---

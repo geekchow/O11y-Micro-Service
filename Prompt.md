@@ -1,3 +1,3 @@
 - [ ] What synthetics means in Observability Domain? https://www.elastic.co/what-is/synthetic-monitoring
-- [X] extend the @docs/04-walkthrough.md  into a fully deployable stack: Spring Boot shop + OTel Java agent + agent/gateway Collectors + Tempo + Prometheus + Loki + Grafana via docker-compose. The walkthrough is the spec; → done: see [stack/README.md](stack/README.md)
+- [X] extend the @docs/01-concepts/04-walkthrough.md  into a fully deployable stack: Spring Boot shop + OTel Java agent + agent/gateway Collectors + Tempo + Prometheus + Loki + Grafana via docker-compose. The walkthrough is the spec; → done: see [stack/README.md](stack/README.md)
 - [ ] 
