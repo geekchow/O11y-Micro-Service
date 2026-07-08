@@ -25,15 +25,17 @@ connectors:
 processors:
   memory_limiter:
     check_interval: 1s
-    limit_mib: 800
-    spike_limit_mib: 200
+    limit_mib: 256
+    spike_limit_mib: 64
   batch: {}
   tail_sampling:
     decision_wait: 10s
-    num_traces: 50000
-    expected_new_traces_per_sec: 100
+    num_traces: 20000
+    expected_new_traces_per_sec: 50
     policies:
-      # exactly the walkthrough spec: all errors, all slow, 1% of the rest
+      # walkthrough spec is errors + slow + 1% baseline; this stack defaults
+      # the baseline to 25% so Tempo has plenty of healthy traces to explore.
+      # Drop to 1 for the production-like ratio.
       - name: errors
         type: status_code
         status_code:
@@ -45,7 +47,7 @@ processors:
       - name: baseline
         type: probabilistic
         probabilistic:
-          sampling_percentage: 1
+          sampling_percentage: 25
 
 exporters:
   otlp/tempo:
@@ -57,7 +59,14 @@ exporters:
   otlphttp/loki:
     endpoint: http://loki:3100/otlp
 
+extensions:
+  health_check:
+    endpoint: 0.0.0.0:13133
+  zpages:
+    endpoint: 0.0.0.0:55679
+
 service:
+  extensions: [health_check, zpages]
   telemetry:
     metrics:
       level: normal

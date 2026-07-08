@@ -2,7 +2,7 @@ server:
   port: 8084
   tomcat:
     threads:
-      max: 300
+      max: 120
 spring:
   application:
     name: payment
@@ -19,4 +19,4 @@ spring:
     init:
       mode: always
 shop:
-  charge-db-seconds: ${CHARGE_DB_SECONDS:0.35}
+  charge-db-seconds: ${CHARGE_DB_SECONDS:0.6}

@@ -49,6 +49,7 @@ services:
       DB_USER: shop
       DB_PASSWORD: shop
       HIKARI_MAX_POOL: ${POOL_SIZE:-20}   # the incident knob (.env)
+      CHARGE_DB_SECONDS: ${CHARGE_DB_SECONDS:-0.6}
     depends_on:
       postgres: { condition: service_healthy }
       otel-agent: { condition: service_started }
@@ -81,6 +82,10 @@ services:
     command: ["--config=/etc/otelcol/config.yaml"]
     volumes:
       - ./otel/collector-agent.yaml:/etc/otelcol/config.yaml:ro
+    ports:
+      - "13133:13133"   # health_check
+      - "55679:55679"   # zpages
+      - "8888:8888"     # collector's own metrics
     depends_on: [otel-gateway]
 
   otel-gateway:
@@ -88,6 +93,10 @@ services:
     command: ["--config=/etc/otelcol/config.yaml"]
     volumes:
       - ./otel/collector-gateway.yaml:/etc/otelcol/config.yaml:ro
+    ports:
+      - "13134:13133"   # health_check
+      - "55680:55679"   # zpages
+      - "8889:8888"     # collector's own metrics
     depends_on: [tempo, loki, prometheus]
 
   # ── backends: one per signal type ─────────────────────────────────────

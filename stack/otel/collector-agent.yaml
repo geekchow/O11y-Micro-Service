@@ -13,8 +13,8 @@ receivers:
 processors:
   memory_limiter:            # always first: refuse before you swell
     check_interval: 1s
-    limit_mib: 400
-    spike_limit_mib: 100
+    limit_mib: 160
+    spike_limit_mib: 48
   resource:
     attributes:
       - key: deployment.environment
@@ -28,7 +28,14 @@ exporters:
     tls:
       insecure: true
 
+extensions:
+  health_check:            # GET :13133 — is this collector alive?
+    endpoint: 0.0.0.0:13133
+  zpages:                  # http://localhost:55679/debug/... — live pipeline internals
+    endpoint: 0.0.0.0:55679
+
 service:
+  extensions: [health_check, zpages]
   telemetry:
     metrics:
       level: normal

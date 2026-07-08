@@ -10,5 +10,6 @@ ARG SERVICE
 ARG OTEL_AGENT_VERSION=2.29.0
 ADD https://github.com/open-telemetry/opentelemetry-java-instrumentation/releases/download/v${OTEL_AGENT_VERSION}/opentelemetry-javaagent.jar /otel/opentelemetry-javaagent.jar
 COPY --from=build /src/${SERVICE}/target/${SERVICE}-*.jar /app/app.jar
-ENV JAVA_TOOL_OPTIONS="-javaagent:/otel/opentelemetry-javaagent.jar"
+# heap capped so all 5 JVMs + backends fit a small Docker VM (2 GB works)
+ENV JAVA_TOOL_OPTIONS="-javaagent:/otel/opentelemetry-javaagent.jar -Xmx160m -Xss512k"
 ENTRYPOINT ["java", "-jar", "/app/app.jar"]

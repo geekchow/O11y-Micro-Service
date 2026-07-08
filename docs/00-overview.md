@@ -76,9 +76,10 @@ mindmap
 | Pack | Zooms into |
 |---|---|
 | [otel-deep-dive/](otel-deep-dive/00-overview.md) | OpenTelemetry internals: signals, context propagation, the Collector, sampling |
+| [stack-tour/](stack-tour/00-overview.md) | The running [../stack/](../stack/README.md): what each container does, the three signal paths, and a hands-on tour |
 
 ## Runnable stack
 
-[../stack/](../stack/README.md) — the [04-walkthrough](04-walkthrough.md) incident as a deployable docker-compose stack: Spring Boot shop + OTel agent/gateway Collectors + Tempo + Prometheus + Loki + Grafana, with a one-knob reproduction of the pool-exhaustion incident.
+[../stack/](../stack/README.md) — a deployable docker-compose instance of this guide: Spring Boot shop + OTel agent/gateway Collectors + Tempo + Prometheus + Loki + Grafana. Tour it component by component via [stack-tour/](stack-tour/00-overview.md); it can also reproduce the [04-walkthrough](04-walkthrough.md) pool-exhaustion incident with one env var.
 
 ➡ **Next:** [01-why.md](01-why.md)

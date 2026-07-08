@@ -2,7 +2,7 @@ server:
   port: 8080
   tomcat:
     threads:
-      max: 300
+      max: 120
 spring:
   application:
     name: gateway
