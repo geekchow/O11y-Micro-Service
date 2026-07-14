@@ -2,6 +2,8 @@
 
 *Part 8 of a series on observability for microservices. [Part 7](07-otel-signals-and-context.md) covered signals and context propagation. This post covers the piece that moves telemetry once it leaves your process: the OpenTelemetry Collector. [Series index](00-index.md).*
 
+📦 GitHub: [https://github.com/geekchow/O11y-Micro-Service](https://github.com/geekchow/O11y-Micro-Service)
+
 ## What it is, in one line
 
 The Collector is a single Go binary that runs configurable `receivers → processors → exporters` **pipelines** — the vendor-agnostic middle tier that lets apps offload telemetry fast and lets backends become a config choice instead of a code change.

@@ -2,6 +2,8 @@
 
 *Part 1 of a series on observability for microservices — concepts, a runnable stack, and deep dives into OpenTelemetry. [Series index](00-index.md).*
 
+📦 GitHub: [https://github.com/geekchow/O11y-Micro-Service](https://github.com/geekchow/O11y-Micro-Service)
+
 If you've ever been paged for "checkout is slow" and spent forty minutes staring at green dashboards before finding the actual problem, this post is about why that happens and what changed in how we're supposed to solve it.
 
 ## Monitoring worked fine — until it didn't

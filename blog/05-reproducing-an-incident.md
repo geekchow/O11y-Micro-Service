@@ -2,6 +2,8 @@
 
 *Part 5 of a series on observability for microservices. [Part 4](04-touring-the-stack.md) toured a healthy checkout through every container. This post breaks the stack deliberately and watches the observability pipeline catch it. [Series index](00-index.md).*
 
+📦 GitHub: [https://github.com/geekchow/O11y-Micro-Service](https://github.com/geekchow/O11y-Micro-Service)
+
 Part 2 walked through a narrated incident: a deploy that halves a database connection pool, and the 25 minutes it takes to find and fix it. The stack from Part 3 can reproduce that exact incident with a single environment variable — no code changes, no fake `sleep()` calls, just a real resource constraint.
 
 ## Why this reproduces cleanly

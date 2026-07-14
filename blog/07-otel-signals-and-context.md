@@ -2,6 +2,8 @@
 
 *Part 7 of a series on observability for microservices. [Part 6](06-otel-why-what.md) covered why OpenTelemetry exists. This post opens up what a span, a metric, and a log actually are inside OTel — and the exact mechanism that keeps them stitched together across a network call. [Series index](00-index.md).*
 
+📦 GitHub: [https://github.com/geekchow/O11y-Micro-Service](https://github.com/geekchow/O11y-Micro-Service)
+
 ## The master map, briefly
 
 Seven concepts make up OTel's internal design, each building only on the ones above it:

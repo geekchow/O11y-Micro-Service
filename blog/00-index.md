@@ -2,6 +2,8 @@
 
 A self-contained blog series on how modern observability actually works: why it exists, how OpenTelemetry, Prometheus, Grafana, and friends divide the work, a real docker-compose stack you can run, and a deep dive into OpenTelemetry's internals. Each post is standalone and includes runnable code — read them in order, or jump straight to whatever you need.
 
+📦 GitHub: [https://github.com/geekchow/O11y-Micro-Service](https://github.com/geekchow/O11y-Micro-Service)
+
 ## Part I — Concepts
 
 1. **[Why Monitoring Broke When We Split the Monolith](01-why-monitoring-broke.md)** — why microservices killed the old "check what you know" model, and the precise definition of observability vs. monitoring.

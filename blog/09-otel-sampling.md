@@ -2,6 +2,8 @@
 
 *Part 9 of a series on observability for microservices. [Part 8](08-otel-collector.md) covered the Collector's pipeline mechanics. This post covers the policy that the gateway tier exists to run: deciding which traces are worth keeping. [Series index](00-index.md).*
 
+📦 GitHub: [https://github.com/geekchow/O11y-Micro-Service](https://github.com/geekchow/O11y-Micro-Service)
+
 ## Whether to sample at all
 
 Sampling exists because trace *volume* scales with traffic while trace *value* doesn't. At 1,000+ traces/sec, the millionth healthy `GET /health` teaches you nothing the first thousand didn't already show you. Sample when volume is high, most traffic is healthy, and errors or latency have identifiable signatures. Don't sample when volume is tiny, or when regulation forbids dropping data outright.

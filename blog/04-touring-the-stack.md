@@ -2,6 +2,8 @@
 
 *Part 4 of a series on observability for microservices. [Part 3](03-building-a-runnable-stack.md) built the stack; this post drives it. Every command below is copy-pasteable against the [companion repo's `stack/`](../stack/) once it's running. [Series index](00-index.md).*
 
+📦 GitHub: [https://github.com/geekchow/O11y-Micro-Service](https://github.com/geekchow/O11y-Micro-Service)
+
 Reading a pipeline diagram only gets you so far. This post pushes one HTTP request through a live 13-container stack and finds its footprint in every component — trace, metrics, and logs — with real commands.
 
 We'll deliberately trigger a **declined checkout**: any `amountCents` ending in `7` gets rejected by the payment service. Error traces are ideal tour subjects because the Collector's tail-sampling policy always keeps them — there's no chance our request gets sampled away before we can find it.

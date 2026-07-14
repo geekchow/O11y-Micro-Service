@@ -2,6 +2,8 @@
 
 *Part 2 of a series on observability for microservices. [Part 1](01-why-monitoring-broke.md) covered why monitoring broke under microservices and where the tools sit. [Series index](00-index.md).*
 
+📦 GitHub: [https://github.com/geekchow/O11y-Micro-Service](https://github.com/geekchow/O11y-Micro-Service)
+
 Seven concepts and five tools, on paper, don't tell you how an actual incident gets solved. This post walks through the seven concepts once, briefly, then spends the rest of its length on one realistic 25-minute incident — a connection-pool exhaustion bug — resolved end to end using every layer from Part 1.
 
 ## The seven concepts, in dependency order

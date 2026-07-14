@@ -2,6 +2,8 @@
 
 *Part 6 of a series on observability for microservices. Parts 1–5 treated OpenTelemetry as one box in a bigger diagram. Starting here, we open that box. [Series index](00-index.md).*
 
+📦 GitHub: [https://github.com/geekchow/O11y-Micro-Service](https://github.com/geekchow/O11y-Micro-Service)
+
 Prometheus, Jaeger, and commercial APMs were already maturing by around 2016. The part of observability that was a genuine mess was earlier in the pipeline: how telemetry got *produced* in the first place.
 
 ## Three pains, one at a time

@@ -2,6 +2,8 @@
 
 *Part 10 (final) of a series on observability for microservices. Parts 6–9 covered OpenTelemetry's design, signals, the Collector, and sampling separately. This post runs every one of those pieces through one real request, in order. [Series index](00-index.md).*
 
+📦 GitHub: [https://github.com/geekchow/O11y-Micro-Service](https://github.com/geekchow/O11y-Micro-Service)
+
 **The scenario:** a Spring Boot shop, two services (`gateway-svc` → `payment-svc`), the OTel Java agent, an agent + gateway Collector pair, tail sampling, and Tempo + Mimir as backends. A customer clicks *Buy* at 14:02:07. The card is declined — which, as established in Part 4, makes this one of the traces worth keeping.
 
 ## 0 — How the services were instrumented

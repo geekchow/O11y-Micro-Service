@@ -2,6 +2,8 @@
 
 *Part 3 of a series on observability for microservices. [Part 1](01-why-monitoring-broke.md) covered the concepts; [Part 2](02-how-it-fits-together.md) walked a full incident. This post moves from theory to something you can `docker compose up`. [Series index](00-index.md).*
 
+📦 GitHub: [https://github.com/geekchow/O11y-Micro-Service](https://github.com/geekchow/O11y-Micro-Service)
+
 Theory is cheap; a stack you can actually run is not. This post — and the full source in the [companion repo's `stack/`](../stack/) — builds a 5-service Spring Boot shop wired with OpenTelemetry, two tiers of Collector, and one backend per signal type: Tempo for traces, Prometheus for metrics, Loki for logs, all correlated in Grafana.
 
 ```
